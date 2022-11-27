@@ -1,5 +1,19 @@
 <template>
-  <div id="app"></div>
+  <div>
+    <Header />
+    <router-view />
+    <Footer />
+  </div>
 </template>
 
-<style lang="scss"></style>
+<script>
+import Header from "./components/header/Header.vue";
+import Footer from "./components/footer/Footer.vue";
+
+export default {
+  components: {
+    Header,
+    Footer,
+  },
+};
+</script>
