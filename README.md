@@ -1,4 +1,4 @@
-# apartment-online-market-web
+# apartment-online-market-fe
 
 ## Project setup
 ```
