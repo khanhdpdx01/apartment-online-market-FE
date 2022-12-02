@@ -13,7 +13,7 @@
     <!-- menu -->
     <div class="flex gap-x-8 mx-auto">
       <router-link
-        :to="{ path: '/' }"
+        :to="{ path: '/test' }"
         tag="span"
         class="cursor-pointer rounded-sm py-1 px-2 text-sm font-medium hover:bg-gray-100"
         >Khám phá</router-link

@@ -44,21 +44,18 @@
       </div>
     </div>
 
-    <div
-      class="my-5 grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4"
-    >
-      <CardItem v-for="x in 10" :key="x" />
-    </div>
+    <CategoryFilter />
   </div>
 </template>
 
 <script>
 import GroupCards from "../components/card/GroupCards.vue";
-import CardItem from "../components/card/CardItem.vue";
+import CategoryFilter from "../components/category-filter/CategoryFilter.vue";
+
 export default {
   components: {
     GroupCards,
-    CardItem,
+    CategoryFilter,
   },
 };
 </script>
