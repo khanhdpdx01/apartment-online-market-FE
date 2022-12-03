@@ -4,5 +4,11 @@ module.exports = {
   theme: {
     extend: {},
   },
-  plugins: [require("daisyui"), require("@tailwindcss/line-clamp")],
+  plugins: [
+    require("daisyui"),
+    require("@tailwindcss/line-clamp"),
+    require("@tailwindcss/forms"),
+    require("@tailwindcss/typography"),
+    require("@tailwindcss/aspect-ratio"),
+  ],
 };
