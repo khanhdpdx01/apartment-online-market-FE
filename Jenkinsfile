@@ -26,7 +26,6 @@ pipeline {
                 }
                 sh "docker image rm ${DOCKER_IMAGE}:${DOCKER_TAG}"
                 sh "docker image rm ${DOCKER_IMAGE}:latest"
-                sh 'docker rmi $(docker images -f "dangling=true" -q)'
             }
         }
         stage('SSH server and deploy') {

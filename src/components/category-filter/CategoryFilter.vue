@@ -186,7 +186,6 @@
           <div class="grid gap-x-8 gap-y-10 lg:grid-cols-4">
             <!-- Filters -->
             <form class="hidden lg:block">
-
               <Disclosure
                 as="div"
                 v-for="section in filters"
