@@ -47,15 +47,6 @@
 
                 <!-- Filters -->
                 <form class="mt-4 border-t border-gray-200">
-                  <h3 class="sr-only">Categories</h3>
-                  <ul role="list" class="px-2 py-3 font-medium text-gray-900">
-                    <li v-for="category in subCategories" :key="category.name">
-                      <a :href="category.href" class="block px-2 py-3">{{
-                        category.name
-                      }}</a>
-                    </li>
-                  </ul>
-
                   <Disclosure
                     as="div"
                     v-for="section in filters"
@@ -195,15 +186,6 @@
           <div class="grid gap-x-8 gap-y-10 lg:grid-cols-4">
             <!-- Filters -->
             <form class="hidden lg:block">
-              <h3 class="sr-only">Categories</h3>
-              <ul
-                role="list"
-                class="space-y-4 border-b border-gray-200 pb-6 text-sm font-medium text-gray-900"
-              >
-                <li v-for="category in subCategories" :key="category.name">
-                  <a :href="category.href">{{ category.name }}</a>
-                </li>
-              </ul>
 
               <Disclosure
                 as="div"
@@ -307,13 +289,7 @@ const sortOptions = [
   { name: "Price: Low to High", href: "#", current: false },
   { name: "Price: High to Low", href: "#", current: false },
 ];
-const subCategories = [
-  { name: "Totes", href: "#" },
-  { name: "Backpacks", href: "#" },
-  { name: "Travel Bags", href: "#" },
-  { name: "Hip Bags", href: "#" },
-  { name: "Laptop Sleeves", href: "#" },
-];
+
 const filters = [
   {
     id: "stage",
