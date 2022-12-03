@@ -113,71 +113,6 @@
           <h1 class="text-4xl font-bold tracking-tight text-gray-900">
             Lọc sản phẩm
           </h1>
-
-          <div class="flex items-center">
-            <Menu as="div" class="relative inline-block text-left">
-              <div>
-                <MenuButton
-                  class="group inline-flex justify-center text-sm font-medium text-gray-700 hover:text-gray-900"
-                >
-                  Sort
-                  <ChevronDownIcon
-                    class="-mr-1 ml-1 h-5 w-5 flex-shrink-0 text-gray-400 group-hover:text-gray-500"
-                    aria-hidden="true"
-                  />
-                </MenuButton>
-              </div>
-
-              <transition
-                enter-active-class="transition ease-out duration-100"
-                enter-from-class="transform opacity-0 scale-95"
-                enter-to-class="transform opacity-100 scale-100"
-                leave-active-class="transition ease-in duration-75"
-                leave-from-class="transform opacity-100 scale-100"
-                leave-to-class="transform opacity-0 scale-95"
-              >
-                <MenuItems
-                  class="absolute right-0 z-10 mt-2 w-40 origin-top-right rounded-md bg-white shadow-2xl ring-1 ring-black ring-opacity-5 focus:outline-none"
-                >
-                  <div class="py-1">
-                    <MenuItem
-                      v-for="option in sortOptions"
-                      :key="option.name"
-                      v-slot="{ active }"
-                    >
-                      <a
-                        :href="option.href"
-                        :class="[
-                          option.current
-                            ? 'font-medium text-gray-900'
-                            : 'text-gray-500',
-                          active ? 'bg-gray-100' : '',
-                          'block px-4 py-2 text-sm',
-                        ]"
-                        >{{ option.name }}</a
-                      >
-                    </MenuItem>
-                  </div>
-                </MenuItems>
-              </transition>
-            </Menu>
-
-            <button
-              type="button"
-              class="-m-2 ml-5 p-2 text-gray-400 hover:text-gray-500 sm:ml-7"
-            >
-              <span class="sr-only">View grid</span>
-              <Squares2X2Icon class="h-5 w-5" aria-hidden="true" />
-            </button>
-            <button
-              type="button"
-              class="-m-2 ml-4 p-2 text-gray-400 hover:text-gray-500 sm:ml-6 lg:hidden"
-              @click="mobileFiltersOpen = true"
-            >
-              <span class="sr-only">Filters</span>
-              <FunnelIcon class="h-5 w-5" aria-hidden="true" />
-            </button>
-          </div>
         </div>
 
         <section aria-labelledby="products-heading" class="pt-6 pb-24">
@@ -234,16 +169,92 @@
                   </div>
                 </DisclosurePanel>
               </Disclosure>
+
+              <!-- Price fiflter -->
+              <Disclosure
+                as="div"
+                class="border-b border-gray-200 py-6"
+                v-slot="{ open }"
+              >
+                <h3 class="-my-3 flow-root">
+                  <DisclosureButton
+                    class="flex w-full items-center justify-between bg-white py-3 text-sm text-gray-400 hover:text-gray-500"
+                  >
+                    <span class="font-medium text-gray-900">Price</span>
+                    <span class="ml-6 flex items-center">
+                      <PlusIcon
+                        v-if="!open"
+                        class="h-5 w-5"
+                        aria-hidden="true"
+                      />
+                      <MinusIcon v-else class="h-5 w-5" aria-hidden="true" />
+                    </span>
+                  </DisclosureButton>
+                </h3>
+                <DisclosurePanel class="pt-6">
+                  <div class="flex items-center">
+                    <input
+                      type="text"
+                      placeholder="Type here"
+                      class="flex-1 input input-bordered w-2/5 max-w-xs"
+                    />
+                    <div class="inline-block justify-center mx-1">-</div>
+                    <input
+                      type="text"
+                      placeholder="Type here"
+                      class="flex-1 input input-bordered w-2/5 max-w-xs"
+                    />
+                  </div>
+                </DisclosurePanel>
+              </Disclosure>
+
+              <div class="w-full flex justify-center mt-4">
+                <button class="btn btn-primary w-1/2 m-">Áp dụng</button>
+              </div>
             </form>
 
             <!-- Product grid -->
             <div class="lg:col-span-3">
               <!-- Replace with your content -->
+              <!-- This example requires Tailwind CSS v2.0+ -->
+              <div class="border-b border-gray-200">
+                <div class="sm:flex sm:items-baseline">
+                  <div class="mt-4 sm:mt-0 sm:ml-10">
+                    <nav class="-mb-px flex space-x-8">
+                      <!-- Current: "border-indigo-500 text-indigo-600", Default: "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300" -->
+                      <a
+                        href="#"
+                        class="border-indigo-500 text-indigo-600 whitespace-nowrap pb-4 px-1 border-b-2 font-medium text-sm"
+                        aria-current="page"
+                      >
+                        Hàng mới
+                      </a>
+
+                      <a
+                        href="#"
+                        class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap pb-4 px-1 border-b-2 font-medium text-sm"
+                      >
+                        Giá thấp đến cao
+                      </a>
+                      <a
+                        href="#"
+                        class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap pb-4 px-1 border-b-2 font-medium text-sm"
+                      >
+                        Giá cao đến thấp
+                      </a>
+                    </nav>
+                  </div>
+                </div>
+              </div>
               <div class="h-96 rounded-lg lg:h-full">
                 <div
                   class="my-5 grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4"
                 >
-                  <CardItem v-for="x in 10" :key="x" />
+                  <CardItem
+                    v-for="x in 10"
+                    :key="x"
+                    @click="viewDetailProduct"
+                  />
                 </div>
               </div>
               <!-- /End replace -->
@@ -263,31 +274,13 @@ import {
   Disclosure,
   DisclosureButton,
   DisclosurePanel,
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuItems,
   TransitionChild,
   TransitionRoot,
 } from "@headlessui/vue";
 import { XMarkIcon } from "@heroicons/vue/24/outline";
-import {
-  ChevronDownIcon,
-  FunnelIcon,
-  MinusIcon,
-  PlusIcon,
-  Squares2X2Icon,
-} from "@heroicons/vue/20/solid";
+import { MinusIcon, PlusIcon } from "@heroicons/vue/20/solid";
 
 import CardItem from "../card/CardItem.vue";
-
-const sortOptions = [
-  { name: "Most Popular", href: "#", current: true },
-  { name: "Best Rating", href: "#", current: false },
-  { name: "Newest", href: "#", current: false },
-  { name: "Price: Low to High", href: "#", current: false },
-  { name: "Price: High to Low", href: "#", current: false },
-];
 
 const filters = [
   {
@@ -311,18 +304,6 @@ const filters = [
       { value: "travel", label: "Travel", checked: true },
       { value: "organization", label: "Organization", checked: false },
       { value: "accessories", label: "Accessories", checked: false },
-    ],
-  },
-  {
-    id: "size",
-    name: "Size",
-    options: [
-      { value: "2l", label: "2L", checked: false },
-      { value: "6l", label: "6L", checked: false },
-      { value: "12l", label: "12L", checked: false },
-      { value: "18l", label: "18L", checked: false },
-      { value: "20l", label: "20L", checked: false },
-      { value: "40l", label: "40L", checked: true },
     ],
   },
 ];
