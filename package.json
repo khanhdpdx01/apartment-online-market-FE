@@ -34,6 +34,7 @@
     "@vue/cli-service": "~5.0.0",
     "@vue/test-utils": "^2.0.0-0",
     "@vue/vue3-jest": "^27.0.0-alpha.1",
+    "axios": "^1.2.1",
     "babel-jest": "^27.0.6",
     "daisyui": "^2.42.1",
     "eslint": "^7.32.0",
