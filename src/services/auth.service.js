@@ -21,11 +21,13 @@ class AuthService {
     TokenService.removeUser();
   }
 
-  register({ username, email, password }) {
+  register({ username, password, confirmPassword, mailNotification }) {
     return http.post("/auth/signup", {
       username,
-      email,
       password,
+      confirmPassword,
+      mailNotification,
+      
     });
   }
 }
