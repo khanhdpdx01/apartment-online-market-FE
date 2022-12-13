@@ -22,30 +22,39 @@
                             <div class="space-y-5">
                                 <div class="space-y-2">
                                     <label class="text-sm font-medium text-gray-700 tracking-wide">Username</label>
-                                    <input
+                                    <input v-model="username"
                                         class=" w-full text-base px-4 py-2 border  border-gray-300 rounded-lg focus:outline-none focus:border-blue-400"
-                                        type="text" @click.prevent="removePlaceHolderUsername()" placeholder="Enter username"
-                                        id="username">
+                                        type="text" @click.prevent="removePlaceHolderUsername()"
+                                        placeholder="Enter username" id="username">
                                 </div>
                                 <div class="space-y-2">
                                     <label class="mb-5 text-sm font-medium text-gray-700 tracking-wide">
-                                       Password
+                                        Password
                                     </label>
-                                    <input
+                                    <input v-model="password"
                                         class="w-full content-center text-base px-4 py-2 border  border-gray-300 rounded-lg focus:outline-none focus:border-blue-400"
                                         type="password" @click.prevent="removePlaceHolderPassword()"
                                         placeholder="Enter your password" id="password">
                                 </div>
                                 <div class="space-y-2">
                                     <label class="mb-5 text-sm font-medium text-gray-700 tracking-wide">
-                                       Confirm Password
+                                        Confirm Password
                                     </label>
-                                    <input
+                                    <input v-model="confirmPassword"
                                         class="w-full content-center text-base px-4 py-2 border  border-gray-300 rounded-lg focus:outline-none focus:border-blue-400"
                                         type="password" @click.prevent="removePlaceHolderAgainPassword()"
                                         placeholder="Enter your password again" id="passwordAgain">
                                 </div>
-                                
+                                <div class="space-y-2">
+                                    <label class="mb-5 text-sm font-medium text-gray-700 tracking-wide">
+                                        Email
+                                    </label>
+                                    <input v-model="mailNotification"
+                                        class="w-full content-center text-base px-4 py-2 border  border-gray-300 rounded-lg focus:outline-none focus:border-blue-400"
+                                        type="text" @click.prevent="removePlaceHolderEmail()"
+                                        placeholder="Enter your email" id="email">
+                                </div>
+
                                 <div>
                                     <button type="submit" @click.prevent="register()"
                                         class="w-full flex justify-center bg-blue-400  hover:bg-blue-500 text-gray-100 p-3  rounded-full tracking-wide font-semibold  shadow-lg cursor-pointer transition ease-in duration-500">
@@ -72,8 +81,10 @@ export default {
     name: "Register",
     data() {
         return {
-            username: '',
-            password: '',
+            username: "",
+            password: "",
+            confirmPassword: "",
+            mailNotification: "",
             showErrorRegister: false,
             showErrorUsername: false,
             showErrorPassword: false,
@@ -96,12 +107,36 @@ export default {
             document.getElementById("passwordAgain").placeholder = "";
         },
 
-        register(){
+        removePlaceHolderEmail() {
+            document.getElementById("email").placeholder = "";
+        },
+        register() {
             const username = document.getElementById("username");
             const password = document.getElementById("password");
-            if(username.value == "" || password.value ==""){
+            if (username.value == "" || password.value == "") {
                 document.getElementById("invalidAccount").innerText = 'Please enter username and password'
             }
+            this.$store
+                .dispatch("auth/register", {
+                    username: this.username,
+                    password: this.password,
+                    confirmPassword: this.confirmPassword,
+                    mailNotification: this.email
+                })
+                .then(
+                    () => {
+                        this.$router.push("/");
+                    },
+                    (error) => {
+                        this.loading = false;
+                        this.message =
+                            (error.response &&
+                                error.response.data &&
+                                error.response.data.message) ||
+                            error.message ||
+                            error.toString();
+                    }
+                );
         }
 
     }

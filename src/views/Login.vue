@@ -35,7 +35,7 @@
                     class="w-full text-base px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-400"
                     type="text"
                     @click.prevent="removePlaceHolderUsername()"
-                    placeholder="wabi_sabi"
+                    placeholder="Enter username"
                     id="username"
                   />
                 </div>
