@@ -123,10 +123,10 @@
           <div class="mt-6">
             <button
               type="submit"
-              @click.prevent="checkout"
+              @click.prevent="createOrder"
               class="w-full bg-indigo-600 border border-transparent rounded-md shadow-sm py-3 px-4 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500"
             >
-              Checkout
+              Create order
             </button>
           </div>
         </section>
@@ -139,6 +139,7 @@
 import { XMarkIcon } from "@heroicons/vue/24/solid";
 import CartService from "../../services/cart.service";
 import ProductService from "../../services/product.service";
+import OrderService from "../../services/order.service";
 
 const products = [
   {
@@ -225,7 +226,6 @@ export default {
       });
 
       this.cart = mergedCartItem;
-      console.log(this.cart);
     },
 
     updateQuantity(event, cartItem) {
@@ -238,6 +238,24 @@ export default {
       });
     },
 
+    createOrder() {
+      const orders = {
+        orderLineItemList: [],
+      };
+
+      this.cart.forEach((cartItem) => {
+        orders.orderLineItemList.push({
+          productId: cartItem.productId,
+          price: cartItem.product.price,
+          quantity: cartItem.quantity,
+        });
+      });
+
+      OrderService.createOrder(orders).then((res) => {
+        localStorage.setItem("order", JSON.stringify(res));
+        this.$router.push({ path: "/order" });
+      });
+    },
     calculateTotalPrice() {
       let totalPrice = 0;
 
@@ -247,8 +265,6 @@ export default {
 
       this.totalPrice = totalPrice;
     },
-
-    checkout() {},
   },
 };
 </script>

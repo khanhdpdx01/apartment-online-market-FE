@@ -20,8 +20,5 @@ export default {
   computed: {
     ...mapGetters("auth", ["getLoggedIn"]),
   },
-  created() {
-    console.log(this.getLoggedIn);
-  }
 };
 </script>
