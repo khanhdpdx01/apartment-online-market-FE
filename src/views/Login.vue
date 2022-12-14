@@ -21,7 +21,7 @@
             <div class="p-12 bg-white mx-auto rounded-2xl w-100">
               <div class="mb-4">
                 <div :class="[showErrorLogin ? 'title error' : 'title']">
-                  <h3 class="font-semibold text-2xl text-gray-800">Sign In</h3>
+                  <h3 class="font-semibold text-2xl text-gray-800">Log in</h3>
                   <p class="text-gray-500">Please sign in to your account.</p>
                   <p style="color: red" id="invalidAccount"></p>
                 </div>
