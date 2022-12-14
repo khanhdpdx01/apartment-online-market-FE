@@ -1,27 +1,21 @@
 <template>
-  <section>
-    <form action="">
-      <div
-        class="bg-no-repeat bg-cover bg-center relative"
-        style="
-          background-image: url(https://www.cask.vn/wwwroot/resources/img/news/5-2019/rsz_h7.jpg);
-        "
-      >
-        <div class="absolute bg-gradient-to-b"></div>
-        <div class="min-h-screen sm:flex sm:flex-row mx-0 justify-center">
-          <div
-            class="flex-col flex self-center p-10 sm:max-w-5xl xl:max-w-2xl z-10"
-          >
-            <div class="self-start hidden lg:flex flex-col text-white">
-              <img src="" class="mb-3" />
-            </div>
-          </div>
+    <section>
+        <form action="">
+            <div class="bg-no-repeat bg-cover bg-center relative"
+                style="background-image: url(https://www.cask.vn/wwwroot/resources/img/news/5-2019/rsz_h7.jpg);">
+                <div class="absolute bg-gradient-to-b"></div>
+                <div class="min-h-screen sm:flex sm:flex-row mx-0 justify-center">
+                    <div class="flex-col flex  self-center p-10 sm:max-w-5xl xl:max-w-2xl  z-10">
+                        <div class="self-start hidden lg:flex flex-col  text-white">
+                            <img src="" class="mb-3">
+                        </div>
+                    </div>
 
                     <div class="flex justify-center self-center  z-10">
                         <div class="p-12 bg-white mx-auto rounded-2xl w-100 ">
                             <div class="mb-4">
                                 <div :class="[showErrorRegister ? 'title error' : 'title']">
-                                    <h3 class="font-semibold text-2xl text-gray-800">Register</h3>
+                                    <h3 class="font-semibold text-2xl text-gray-800">Register for seller</h3>
                                     <p style="color:red;" id="invalidAccount"></p>
                                 </div>
                             </div>
@@ -70,6 +64,7 @@
                             </div>
                         </div>
                     </div>
+
                 </div>
             </div>
         </form>
@@ -80,37 +75,37 @@
 </style>
 
 <script>
-import { logicalExpression } from "@babel/types";
+import { logicalExpression } from '@babel/types';
 
 export default {
-  name: "Register",
-  data() {
-    return {
-      username: "",
-      password: "",
-      confirmPassword: "",
-      mailNotification: "",
-      showErrorRegister: false,
-      showErrorUsername: false,
-      showErrorPassword: false,
-    };
-  },
-  methods: {
-    removePlaceHolderUsername() {
-      this.showErrorRegister = false;
-      this.showErrorUsername = false;
-      this.showErrorPassword = false;
-      document.getElementById("username").placeholder = "";
-      document.getElementById("invalidAccount").innerText = "";
+    name: "Register",
+    data() {
+        return {
+            username: "",
+            password: "",
+            confirmPassword: "",
+            mailNotification: "",
+            showErrorRegister: false,
+            showErrorUsername: false,
+            showErrorPassword: false,
+        };
     },
+    methods: {
+        removePlaceHolderUsername() {
+            this.showErrorRegister = false;
+            this.showErrorUsername = false;
+            this.showErrorPassword = false;
+            document.getElementById("username").placeholder = "";
+            document.getElementById("invalidAccount").innerText = ''
+        },
 
-    removePlaceHolderPassword() {
-      document.getElementById("password").placeholder = "";
-      document.getElementById("invalidAccount").innerText = "";
-    },
-    removePlaceHolderAgainPassword() {
-      document.getElementById("passwordAgain").placeholder = "";
-    },
+        removePlaceHolderPassword() {
+            document.getElementById("password").placeholder = "";
+            document.getElementById("invalidAccount").innerText = ''
+        },
+        removePlaceHolderAgainPassword() {
+            document.getElementById("passwordAgain").placeholder = "";
+        },
 
         removePlaceHolderEmail() {
             document.getElementById("mailNotification").placeholder = "";
@@ -122,7 +117,7 @@ export default {
                 document.getElementById("invalidAccount").innerText = 'Please enter username and password'
             }
             this.$store
-                .dispatch("auth/register", {
+                .dispatch("auth/registerSeller", {
                     username: this.username,
                     password: this.password,
                     confirmPassword: this.confirmPassword,

@@ -1,4 +1,4 @@
-# apartment-online-market-fe
+# 19N11-TEAM15-Ecommerce: Apartment Building Online Market
 
 ## Project setup
 ```

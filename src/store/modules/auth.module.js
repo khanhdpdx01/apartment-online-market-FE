@@ -37,6 +37,18 @@ export const auth = {
         }
       );
     },
+    registerSeller({ commit }, user) {
+      return AuthService.registerSeller(user).then(
+        (response) => {
+          commit("registerSuccess");
+          return Promise.resolve(response.data);
+        },
+        (error) => {
+          commit("registerFailure");
+          return Promise.reject(error);
+        }
+      );
+    },
     refreshToken({ commit }, accessToken) {
       commit("refreshToken", accessToken);
     },
