@@ -110,55 +110,20 @@
           </h2>
 
           <dl class="mt-6 space-y-4">
-            <div class="flex items-center justify-between">
-              <dt class="text-sm text-gray-600">Subtotal</dt>
-              <dd class="text-sm font-medium text-gray-900">$99.00</dd>
-            </div>
-            <div
-              class="border-t border-gray-200 pt-4 flex items-center justify-between"
-            >
-              <dt class="flex items-center text-sm text-gray-600">
-                <span>Shipping estimate</span>
-                <a
-                  href="#"
-                  class="ml-2 flex-shrink-0 text-gray-400 hover:text-gray-500"
-                >
-                  <span class="sr-only"
-                    >Learn more about how shipping is calculated</span
-                  >
-                  <QuestionMarkCircleIcon class="h-5 w-5" aria-hidden="true" />
-                </a>
-              </dt>
-              <dd class="text-sm font-medium text-gray-900">$5.00</dd>
-            </div>
-            <div
-              class="border-t border-gray-200 pt-4 flex items-center justify-between"
-            >
-              <dt class="flex text-sm text-gray-600">
-                <span>Tax estimate</span>
-                <a
-                  href="#"
-                  class="ml-2 flex-shrink-0 text-gray-400 hover:text-gray-500"
-                >
-                  <span class="sr-only"
-                    >Learn more about how tax is calculated</span
-                  >
-                  <QuestionMarkCircleIcon class="h-5 w-5" aria-hidden="true" />
-                </a>
-              </dt>
-              <dd class="text-sm font-medium text-gray-900">$8.32</dd>
-            </div>
             <div
               class="border-t border-gray-200 pt-4 flex items-center justify-between"
             >
               <dt class="text-base font-medium text-gray-900">Order total</dt>
-              <dd class="text-base font-medium text-gray-900">$112.32</dd>
+              <dd class="text-base font-medium text-gray-900">
+                {{ `${totalPrice}đ` }}
+              </dd>
             </div>
           </dl>
 
           <div class="mt-6">
             <button
               type="submit"
+              @click.prevent="checkout"
               class="w-full bg-indigo-600 border border-transparent rounded-md shadow-sm py-3 px-4 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500"
             >
               Checkout
@@ -171,7 +136,7 @@
 </template>
 
 <script>
-import { QuestionMarkCircleIcon, XMarkIcon } from "@heroicons/vue/24/solid";
+import { XMarkIcon } from "@heroicons/vue/24/solid";
 import CartService from "../../services/cart.service";
 import ProductService from "../../services/product.service";
 
@@ -216,7 +181,6 @@ const products = [
 
 export default {
   components: {
-    QuestionMarkCircleIcon,
     XMarkIcon,
   },
   data() {
@@ -228,11 +192,13 @@ export default {
         productId: null,
         quantity: 0,
       },
+      totalPrice: 0,
       baseUrlImage: window.VUE_APP_SERVICE_ENDPOINT + "images/",
     };
   },
   async created() {
     await this.getCart();
+    await this.calculateTotalPrice();
   },
   methods: {
     async getCart() {
@@ -271,6 +237,18 @@ export default {
         console.log(response);
       });
     },
+
+    calculateTotalPrice() {
+      let totalPrice = 0;
+
+      this.cart.forEach((cartItem) => {
+        totalPrice += cartItem.quantity * cartItem.product.price;
+      });
+
+      this.totalPrice = totalPrice;
+    },
+
+    checkout() {},
   },
 };
 </script>
