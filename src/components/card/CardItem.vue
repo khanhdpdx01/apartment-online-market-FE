@@ -1,23 +1,32 @@
 <template>
   <!-- component -->
   <!-- This is an example component -->
-  <div class="max-w-xs mx-auto">
+  <div class="max-w-xs mx-auto w-full">
     <div
-      class="bg-white shadow-md rounded-lg max-w-sm dark:bg-gray-800 dark:border-gray-700"
+      class="flex flex-col bg-white shadow-md rounded-lg max-w-sm dark:bg-gray-800 dark:border-gray-700 h-full"
     >
-      <a href="#">
-        <img
-          class="rounded-t-lg p-8"
-          src="https://i.ibb.co/KqdgGY4/cosmetic-packaging-mockup-1150-40280.webp"
-          alt="product image"
-        />
-      </a>
+      <div class="flex-1">
+        <a href="#">
+          <img
+            class="rounded-t-lg p-8"
+            src="https://i.ibb.co/KqdgGY4/cosmetic-packaging-mockup-1150-40280.webp"
+            alt="product image"
+            v-if="product.imagesList === undefined"
+          />
+          <img
+            class="rounded-t-lg p-8"
+            :src="`${baseUrlImage}${product.imagesList[0]}`"
+            alt="product image"
+            v-else
+          />
+        </a>
+      </div>
       <div class="px-5 pb-5">
         <a href="#">
           <h3
-            class="text-gray-900 font-semibold text-xl tracking-tight dark:text-white line-clamp-2"
+            class="text-gray-900 font-semibold text-xl tracking-tight dark:text-white line-clamp-1"
           >
-            Apple Watch Series 7 GPS, Aluminium Case, Starlight Sport
+            {{ product.name }}
           </h3>
         </a>
         <div class="flex items-center mt-2.5 mb-5">
@@ -40,12 +49,13 @@
           >
         </div>
         <div class="flex items-center justify-between">
-          <span class="text-3xl font-bold text-gray-900 dark:text-white"
-            >$599</span
-          >
+          <span class="text-xl font-bold text-gray-900 dark:text-white">{{
+            `${product.price}đ`
+          }}</span>
           <a
             href="#"
             class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+            @click.prevent="addProductToCart"
             >Add to cart</a
           >
         </div>
@@ -53,3 +63,30 @@
     </div>
   </div>
 </template>
+
+<script>
+import CartService from "../../services/cart.service";
+
+export default {
+  props: ["product"],
+  data() {
+    return {
+      baseUrlImage: window.VUE_APP_SERVICE_ENDPOINT + "images/",
+    };
+  },
+  methods: {
+    addProductToCart() {
+      CartService.addProductToCart({
+        productId: this.product.id,
+        quantity: 1,
+      }).then((response) => {
+        console.log(response);
+      });
+
+      CartService.getCart().then((response) => {
+        console.log("Cart", response);
+      });
+    },
+  },
+};
+</script>

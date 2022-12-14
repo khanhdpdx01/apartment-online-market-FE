@@ -65,4 +65,7 @@ export const auth = {
       state.user = { ...state.user, accessToken: accessToken };
     },
   },
+  getters: {
+    getLoggedIn: (state) => state.status.loggedIn,
+  },
 };

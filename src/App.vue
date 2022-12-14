@@ -9,11 +9,19 @@
 <script>
 import Header from "./components/header/Header.vue";
 import Footer from "./components/footer/Footer.vue";
+import { mapGetters } from "vuex";
 
 export default {
   components: {
     Header,
     Footer,
   },
+
+  computed: {
+    ...mapGetters("auth", ["getLoggedIn"]),
+  },
+  created() {
+    console.log(this.getLoggedIn);
+  }
 };
 </script>
