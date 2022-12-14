@@ -172,12 +172,12 @@
                       {{ detail.name }}
                     </span>
                     <span class="ml-6 flex items-center">
-                      <PlusSmIcon
+                      <PlusSmallIcon
                         v-if="!open"
                         class="block h-6 w-6 text-gray-400 group-hover:text-gray-500"
                         aria-hidden="true"
                       />
-                      <MinusSmIcon
+                      <MinusSmallIcon
                         v-else
                         class="block h-6 w-6 text-indigo-400 group-hover:text-indigo-500"
                         aria-hidden="true"
@@ -215,7 +215,11 @@ import {
   TabPanels,
 } from "@headlessui/vue";
 import { StarIcon } from "@heroicons/vue/24/solid";
-import { HeartIcon, MinusSmIcon, PlusSmIcon } from "@heroicons/vue/24/outline";
+import {
+  HeartIcon,
+  MinusSmallIcon,
+  PlusSmallIcon,
+} from "@heroicons/vue/24/outline";
 
 const product = {
   name: "Zip Tote Basket",
@@ -295,8 +299,8 @@ export default {
     TabPanel,
     TabPanels,
     HeartIcon,
-    MinusSmIcon,
-    PlusSmIcon,
+    MinusSmallIcon,
+    PlusSmallIcon,
     StarIcon,
   },
   setup() {

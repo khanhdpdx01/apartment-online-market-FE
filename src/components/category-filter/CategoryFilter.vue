@@ -123,8 +123,6 @@
             <form class="hidden lg:block">
               <Disclosure
                 as="div"
-                v-for="section in filters"
-                :key="section.id"
                 class="border-b border-gray-200 py-6"
                 v-slot="{ open }"
               >
@@ -132,9 +130,7 @@
                   <DisclosureButton
                     class="flex w-full items-center justify-between bg-white py-3 text-sm text-gray-400 hover:text-gray-500"
                   >
-                    <span class="font-medium text-gray-900">{{
-                      section.name
-                    }}</span>
+                    <span class="font-medium text-gray-900">Category</span>
                     <span class="ml-6 flex items-center">
                       <PlusIcon
                         v-if="!open"
@@ -148,22 +144,21 @@
                 <DisclosurePanel class="pt-6">
                   <div class="space-y-4">
                     <div
-                      v-for="(option, optionIdx) in section.options"
-                      :key="option.value"
+                      v-for="option in categories"
+                      :key="option.id"
                       class="flex items-center"
                     >
                       <input
-                        :id="`filter-${section.id}-${optionIdx}`"
-                        :name="`${section.id}[]`"
-                        :value="option.value"
+                        :id="`filter-category-${option.id}}`"
+                        :value="option.id"
                         type="checkbox"
-                        :checked="option.checked"
+                        v-model="options.categories"
                         class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
                       />
                       <label
-                        :for="`filter-${section.id}-${optionIdx}`"
+                        :for="`filter-category-${option.id}}`"
                         class="ml-3 text-sm text-gray-600"
-                        >{{ option.label }}</label
+                        >{{ option.name }}</label
                       >
                     </div>
                   </div>
@@ -196,20 +191,30 @@
                     <input
                       type="text"
                       placeholder="Type here"
+                      v-model="options.price.minValue"
                       class="flex-1 input input-bordered w-2/5 max-w-xs"
                     />
                     <div class="inline-block justify-center mx-1">-</div>
                     <input
                       type="text"
                       placeholder="Type here"
+                      v-model="options.price.maxValue"
                       class="flex-1 input input-bordered w-2/5 max-w-xs"
                     />
                   </div>
                 </DisclosurePanel>
               </Disclosure>
+              {{ options.categories }}
+              {{ options.price.minValue }}
+              {{ options.price.maxValue }}
 
               <div class="w-full flex justify-center mt-4">
-                <button class="btn btn-primary w-1/2 m-">Áp dụng</button>
+                <button
+                  class="btn btn-primary w-1/2 mx-auto"
+                  @click.prevent="filterProduct"
+                >
+                  Áp dụng
+                </button>
               </div>
             </form>
 
@@ -223,24 +228,18 @@
                     <nav class="-mb-px flex space-x-8">
                       <!-- Current: "border-indigo-500 text-indigo-600", Default: "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300" -->
                       <a
+                        v-for="(option, idx) in options.tabs"
+                        :key="idx"
                         href="#"
-                        class="border-indigo-500 text-indigo-600 whitespace-nowrap pb-4 px-1 border-b-2 font-medium text-sm"
+                        :class="
+                          option.checked
+                            ? 'border-indigo-500 text-indigo-600 whitespace-nowrap pb-4 px-1 border-b-2 font-medium text-sm'
+                            : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap pb-4 px-1 border-b-2 font-medium text-sm'
+                        "
                         aria-current="page"
+                        @click.prevent="moveTab(idx)"
                       >
-                        Hàng mới
-                      </a>
-
-                      <a
-                        href="#"
-                        class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap pb-4 px-1 border-b-2 font-medium text-sm"
-                      >
-                        Giá thấp đến cao
-                      </a>
-                      <a
-                        href="#"
-                        class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap pb-4 px-1 border-b-2 font-medium text-sm"
-                      >
-                        Giá cao đến thấp
+                        {{ option.name }}
                       </a>
                     </nav>
                   </div>
@@ -251,9 +250,17 @@
                   class="my-5 grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4"
                 >
                   <CardItem
-                    v-for="x in 10"
-                    :key="x"
-                    @click="viewDetailProduct"
+                    v-for="product in this.products"
+                    :key="product.id"
+                    :product="product"
+                  />
+                </div>
+                <div class="w-full flex justify-center">
+                  <pagination
+                    :total-pages="page.totalPages"
+                    :per-page="page.totalItems"
+                    :current-page="page.currentPage"
+                    @pagechanged="onPageChange"
                   />
                 </div>
               </div>
@@ -265,6 +272,164 @@
     </div>
   </div>
 </template>
+
+<script>
+import ProductService from "../../services/product.service";
+import CategoryService from "../../services/category.service";
+
+export default {
+  data() {
+    return {
+      products: [],
+      page: {
+        totalPages: 0,
+        totalItems: 0,
+        currentPage: 1,
+      },
+      categories: [],
+      options: {
+        categories: [],
+        price: {
+          minValue: "0",
+          maxValue: "100000",
+        },
+        tabs: [
+          // {
+          //   name: "Hàng mới",
+          //   checked: false,
+          // },
+          {
+            name: "Giá thấp đến cao",
+            checked: true,
+            sort: {
+              key: "price",
+              direction: "ASC",
+            },
+          },
+          {
+            name: "Giá cao đến thấp",
+            checked: false,
+            sort: {
+              key: "price",
+              direction: "DESC",
+            },
+          },
+        ],
+      },
+    };
+  },
+  created() {
+    // this.getProducts();
+    this.getCategories();
+    this.filterProduct();
+  },
+  methods: {
+    getProducts() {
+      ProductService.fetchProducts().then((response) => {
+        this.products = response;
+      });
+    },
+
+    getCategories() {
+      CategoryService.fetchCategories().then((response) => {
+        this.categories = response;
+      });
+    },
+
+    filterProduct() {
+      const data = {
+        size: 20,
+        page: this.currentPage,
+        sorts: [],
+        filterCriteriaList: [],
+      };
+
+      const tab = this.options.tabs.filter((tab) => tab.checked === true)[0];
+      const filterPriceObj = this.createFilterPriceObj(
+        this.options.price.minValue,
+        this.options.price.maxValue
+      );
+      const filterCategoriesObj = this.createFilterCategoriesObj(
+        this.options.categories
+      );
+
+      if (filterPriceObj !== undefined) {
+        data.filterCriteriaList.push(filterPriceObj);
+      }
+
+      if (filterCategoriesObj !== undefined) {
+        data.filterCriteriaList.push(filterCategoriesObj);
+      }
+      data.sorts.push({ ...tab.sort });
+
+      ProductService.fitlerProduct(data).then((res) => {
+        console.log(res);
+        this.page.totalPages = res.totalPages;
+        this.page.totalItems = res.totalItems;
+        this.page.currentPage = res.currentPage;
+        this.products = res.items;
+      });
+    },
+
+    moveTab(idxTab) {
+      console.log(idxTab);
+      this.options.tabs.forEach((tab, idx) => {
+        idxTab === idx ? (tab.checked = true) : (tab.checked = false);
+      });
+    },
+
+    createFilterCategoriesObj(categories) {
+      if (categories.length === 0) return;
+
+      return {
+        key: "categoryId",
+        operation: "IN",
+        value: categories,
+      };
+    },
+
+    createFilterPriceObj(minValue, maxValue) {
+      const minValueInt = parseInt(minValue);
+      const maxValueInt = parseInt(maxValue);
+      const isMinValueNaN = isNaN(minValueInt);
+      const isMaxValueNaN = isNaN(maxValueInt);
+
+      if (isMinValueNaN && isMaxValueNaN) return;
+
+      if (!isMinValueNaN && isMaxValueNaN) {
+        return {
+          key: "price",
+          operation: "MIN",
+          field_type: "INTEGER",
+          value: minValueInt,
+        };
+      }
+
+      if (isMinValueNaN && !isMaxValueNaN) {
+        return {
+          key: "price",
+          operation: "MAX",
+          field_type: "INTEGER",
+          value: maxValueInt,
+        };
+      }
+
+      return {
+        key: "price",
+        operation: "BETWEEN",
+        field_type: "INTEGER",
+        value: minValueInt,
+        value_to: maxValueInt,
+      };
+    },
+
+    async onPageChange(page) {
+      this.page.currentPage = page;
+      this.filterProduct();
+    },
+  },
+};
+</script>
 
 <script setup>
 import { ref } from "vue";
@@ -279,34 +444,8 @@ import {
 } from "@headlessui/vue";
 import { XMarkIcon } from "@heroicons/vue/24/outline";
 import { MinusIcon, PlusIcon } from "@heroicons/vue/20/solid";
-
+import Pagination from "../pagination/Pagination.vue";
 import CardItem from "../card/CardItem.vue";
-
-const filters = [
-  {
-    id: "stage",
-    name: "Stage",
-    options: [
-      { value: "stage1", label: "Stage 1", checked: false },
-      { value: "stage2", label: "Stage 2", checked: false },
-      { value: "stage3", label: "Stage 3", checked: true },
-      { value: "stage4", label: "Stage 4", checked: false },
-      { value: "stage5", label: "Stage 5", checked: false },
-      { value: "stage6", label: "Stage 6", checked: false },
-    ],
-  },
-  {
-    id: "category",
-    name: "Category",
-    options: [
-      { value: "new-arrivals", label: "New Arrivals", checked: false },
-      { value: "sale", label: "Sale", checked: false },
-      { value: "travel", label: "Travel", checked: true },
-      { value: "organization", label: "Organization", checked: false },
-      { value: "accessories", label: "Accessories", checked: false },
-    ],
-  },
-];
 
 const mobileFiltersOpen = ref(false);
 </script>

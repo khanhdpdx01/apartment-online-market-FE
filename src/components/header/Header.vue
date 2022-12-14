@@ -61,7 +61,12 @@
             <span class="font-bold text-lg">8 Items</span>
             <span class="text-info">Subtotal: $999</span>
             <div class="card-actions">
-              <button class="btn btn-primary btn-block">View cart</button>
+              <button
+                class="btn btn-primary btn-block"
+                @click="viewShoppingCart"
+              >
+                View cart
+              </button>
             </div>
           </div>
         </div>
@@ -95,6 +100,11 @@ import SearchInput from "./SearchInput.vue";
 export default {
   components: {
     SearchInput,
+  },
+  methods: {
+    viewShoppingCart() {
+      this.$router.push("/cart");
+    },
   },
 };
 </script>

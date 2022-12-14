@@ -5,7 +5,9 @@ const setup = (store) => {
   http.interceptors.request.use(
     (config) => {
       const token = TokenService.getLocalAccessToken();
-      if (token) {
+      const isExpired = TokenService.checkTokenExpired();
+
+      if (token && !isExpired) {
         config.headers["Authorization"] = "Bearer " + token; // for Spring Boot back-end
         // config.headers["x-access-token"] = token; // for Node.js Express back-end
       }
@@ -23,20 +25,22 @@ const setup = (store) => {
     async (err) => {
       const originalConfig = err.config;
 
-      if (originalConfig.url !== "/auth/signin" && err.response) {
+      if (originalConfig.url !== "/v1/auth/signin" && err.response) {
         // Access Token was expired
         if (err.response.status === 401 && !originalConfig._retry) {
           originalConfig._retry = true;
+          TokenService.setTokenExpired(true);
 
           try {
-            const rs = await http.post("/auth/refreshtoken", {
-              refreshToken: TokenService.getLocalRefreshToken(),
+            const rs = await http.post("/v1/auth/refresh-token", {
+              token: TokenService.getLocalRefreshToken(),
+              tokenType: "Bearer",
             });
-
             const { accessToken } = rs.data;
 
             store.dispatch("auth/refreshToken", accessToken);
             TokenService.updateLocalAccessToken(accessToken);
+            TokenService.setTokenExpired(false);
 
             return http(originalConfig);
           } catch (_error) {
