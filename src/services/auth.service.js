@@ -30,6 +30,16 @@ class AuthService {
       mailNotification,
     });
   }
+
+  registerSeller({ username, password, confirmPassword, mailNotification }) {
+    return http.post("/v1/auth/signup/seller", {
+      username,
+      password,
+      confirmPassword,
+      mailNotification,
+      
+    });
+  }
 }
 
 export default new AuthService();
