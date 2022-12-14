@@ -1,29 +1,55 @@
-import Vue from "vue";
-import VueRouter from "vue-router";
-import HomeView from "../views/HomeView.vue";
-
-Vue.use(VueRouter);
+import { createRouter, createWebHistory } from "vue-router";
 
 const routes = [
   {
     path: "/",
-    name: "home",
-    component: HomeView,
+    name: "Home",
+    component: () => import("../views/Home.vue"),
   },
   {
-    path: "/about",
-    name: "about",
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () =>
-      import(/* webpackChunkName: "about" */ "../views/AboutView.vue"),
+    path: "/shop",
+    name: "Shop",
+    component: () => import("../views/Shop.vue"),
+  },
+  {
+    path: "/test",
+    name: "Test",
+    component: () => import("../components/product/ProductOverview.vue"),
+  },
+  {
+    path: "/login",
+    name: "Login",
+    component: () => import("../views/Login.vue"),
+  },
+  {
+    path: "/register",
+    name: "Register",
+    component: () => import("../views/Register.vue"),
+  },
+  {
+    path: "/cart",
+    name: "Cart",
+    component: () => import("../components/shopping-cart/ShoppingCart.vue"),
+  },
+  {
+    path: "/order",
+    name: "Order",
+    component: () => import("../views/Order.vue"),
+  },
+  {
+    path: "/order-history",
+    name: "OrderHistory",
+    component: () => import("../components/order-history/OrderHistory.vue"),
+  },
+  {
+    path: "/registerSeller",
+    name: "RegisterSeller",
+    component: () => import("../views/RegisterSeller.vue"),
   },
 ];
 
-const router = new VueRouter({
-  mode: "history",
-  base: process.env.BASE_URL,
+const router = createRouter({
+  history: createWebHistory(process.env.BASE_URL),
   routes,
 });
 
