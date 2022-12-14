@@ -31,7 +31,7 @@ pipeline {
         stage('SSH server and deploy') {
             steps{
                 sh 'echo deploy'
-                sh "ssh -i ~/.ssh/id_rsa_ggcloud khanhdpdx@34.143.194.243 './deploy.sh'"
+                sh "ssh -i ~/.ssh/id_rsa_ggcloud khanhdpdx@34.143.194.243 './deploy-FE.sh'"
             }
         }
     }

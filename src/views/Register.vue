@@ -17,63 +17,90 @@
             </div>
           </div>
 
-                    <div class="flex justify-center self-center  z-10">
-                        <div class="p-12 bg-white mx-auto rounded-2xl w-100 ">
-                            <div class="mb-4">
-                                <div :class="[showErrorRegister ? 'title error' : 'title']">
-                                    <h3 class="font-semibold text-2xl text-gray-800">Register</h3>
-                                    <p style="color:red;" id="invalidAccount"></p>
-                                </div>
-                            </div>
-                            <div class="space-y-5">
-                                <div class="space-y-2">
-                                    <label class="text-sm font-medium text-gray-700 tracking-wide">Username</label>
-                                    <input v-model="username"
-                                        class=" w-full text-base px-4 py-2 border  border-gray-300 rounded-lg focus:outline-none focus:border-blue-400"
-                                        type="text" @click.prevent="removePlaceHolderUsername()"
-                                        placeholder="Enter username" id="username">
-                                </div>
-                                <div class="space-y-2">
-                                    <label class="mb-5 text-sm font-medium text-gray-700 tracking-wide">
-                                        Password
-                                    </label>
-                                    <input v-model="password"
-                                        class="w-full content-center text-base px-4 py-2 border  border-gray-300 rounded-lg focus:outline-none focus:border-blue-400"
-                                        type="password" @click.prevent="removePlaceHolderPassword()"
-                                        placeholder="Enter your password" id="password">
-                                </div>
-                                <div class="space-y-2">
-                                    <label class="mb-5 text-sm font-medium text-gray-700 tracking-wide">
-                                        Confirm Password
-                                    </label>
-                                    <input v-model="confirmPassword"
-                                        class="w-full content-center text-base px-4 py-2 border  border-gray-300 rounded-lg focus:outline-none focus:border-blue-400"
-                                        type="password" @click.prevent="removePlaceHolderAgainPassword()"
-                                        placeholder="Enter your password again" id="passwordAgain">
-                                </div>
-                                <div class="space-y-2">
-                                    <label class="mb-5 text-sm font-medium text-gray-700 tracking-wide">
-                                        Email
-                                    </label>
-                                    <input v-model="mailNotification"
-                                        class="w-full content-center text-base px-4 py-2 border  border-gray-300 rounded-lg focus:outline-none focus:border-blue-400"
-                                        type="text" @click.prevent="removePlaceHolderEmail()"
-                                        placeholder="Enter your email" id="mailNotification">
-                                </div>
-
-                                <div>
-                                    <button type="submit" @click.prevent="register()"
-                                        class="w-full flex justify-center bg-blue-400  hover:bg-blue-500 text-gray-100 p-3  rounded-full tracking-wide font-semibold  shadow-lg cursor-pointer transition ease-in duration-500">
-                                        Sign up
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+          <div class="flex justify-center self-center z-10">
+            <div class="p-12 bg-white mx-auto rounded-2xl w-100">
+              <div class="mb-4">
+                <div :class="[showErrorRegister ? 'title error' : 'title']">
+                  <h3 class="font-semibold text-2xl text-gray-800">Register</h3>
+                  <p style="color: red" id="invalidAccount"></p>
                 </div>
+              </div>
+              <div class="space-y-5">
+                <div class="space-y-2">
+                  <label class="text-sm font-medium text-gray-700 tracking-wide"
+                    >Username</label
+                  >
+                  <input
+                    v-model="username"
+                    class="w-full text-base px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-400"
+                    type="text"
+                    @click.prevent="removePlaceHolderUsername()"
+                    placeholder="Enter username"
+                    id="username"
+                  />
+                </div>
+                <div class="space-y-2">
+                  <label
+                    class="mb-5 text-sm font-medium text-gray-700 tracking-wide"
+                  >
+                    Password
+                  </label>
+                  <input
+                    v-model="password"
+                    class="w-full content-center text-base px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-400"
+                    type="password"
+                    @click.prevent="removePlaceHolderPassword()"
+                    placeholder="Enter your password"
+                    id="password"
+                  />
+                </div>
+                <div class="space-y-2">
+                  <label
+                    class="mb-5 text-sm font-medium text-gray-700 tracking-wide"
+                  >
+                    Confirm Password
+                  </label>
+                  <input
+                    v-model="confirmPassword"
+                    class="w-full content-center text-base px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-400"
+                    type="password"
+                    @click.prevent="removePlaceHolderAgainPassword()"
+                    placeholder="Enter your password again"
+                    id="passwordAgain"
+                  />
+                </div>
+                <div class="space-y-2">
+                  <label
+                    class="mb-5 text-sm font-medium text-gray-700 tracking-wide"
+                  >
+                    Email
+                  </label>
+                  <input
+                    v-model="mailNotification"
+                    class="w-full content-center text-base px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-400"
+                    type="text"
+                    @click.prevent="removePlaceHolderEmail()"
+                    placeholder="Enter your email"
+                    id="mailNotification"
+                  />
+                </div>
+
+                <div>
+                  <button
+                    type="submit"
+                    @click.prevent="register()"
+                    class="w-full flex justify-center bg-blue-400 hover:bg-blue-500 text-gray-100 p-3 rounded-full tracking-wide font-semibold shadow-lg cursor-pointer transition ease-in duration-500"
+                  >
+                    Sign up
+                  </button>
+                </div>
+              </div>
             </div>
-        </form>
-    </section>
+          </div>
+        </div>
+      </div>
+    </form>
+  </section>
 </template>
 <style>
 @import "../assets/css/tailwind-2.0.4.css";
@@ -81,6 +108,8 @@
 
 <script>
 import { logicalExpression } from "@babel/types";
+import { useToast } from "vue-toastification";
+const toast = useToast();
 
 export default {
   name: "Register",
@@ -112,39 +141,41 @@ export default {
       document.getElementById("passwordAgain").placeholder = "";
     },
 
-        removePlaceHolderEmail() {
-            document.getElementById("mailNotification").placeholder = "";
-        },
-        register() {
-            const username = document.getElementById("username");
-            const password = document.getElementById("password");
-            if (username.value == "" || password.value == "") {
-                document.getElementById("invalidAccount").innerText = 'Please enter username and password'
-            }
-            this.$store
-                .dispatch("auth/register", {
-                    username: this.username,
-                    password: this.password,
-                    confirmPassword: this.confirmPassword,
-                    mailNotification: this.mailNotification
-                })
-                .then(
-                    () => {
-                        this.$router.push("/login");
-                    },
-                    (error) => {
-                        this.loading = false;
-                        this.message =
-                            (error.response &&
-                                error.response.data &&
-                                error.response.data.message) ||
-                            error.message ||
-                            error.toString();
-                    }
-                );
-        }
-
-    }
-
-}
+    removePlaceHolderEmail() {
+      document.getElementById("mailNotification").placeholder = "";
+    },
+    register() {
+      const username = document.getElementById("username");
+      const password = document.getElementById("password");
+      if (username.value == "" || password.value == "") {
+        document.getElementById("invalidAccount").innerText =
+          "Please enter username and password";
+      }
+      this.$store
+        .dispatch("auth/register", {
+          username: this.username,
+          password: this.password,
+          confirmPassword: this.confirmPassword,
+          mailNotification: this.mailNotification,
+        })
+        .then(
+          () => {
+            toast.success("Đăng kí thành công", {
+              timeout: 1500,
+            });
+            this.$router.push("/login");
+          },
+          (error) => {
+            this.loading = false;
+            this.message =
+              (error.response &&
+                error.response.data &&
+                error.response.data.message) ||
+              error.message ||
+              error.toString();
+          }
+        );
+    },
+  },
+};
 </script>

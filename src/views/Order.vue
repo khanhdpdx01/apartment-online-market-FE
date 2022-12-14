@@ -242,7 +242,7 @@ export default {
   methods: {
     makePayment() {
       const order = JSON.parse(localStorage.getItem("order"));
-      const returnUrl = "http://localhost:9090/order-history";
+      const returnUrl = "http://192.168.1.27:9090/order-history";
 
       OrderService.fetchVnpayUrl(order.reference, returnUrl).then((res) => {
         window.location.href = res.data;
