@@ -32,6 +32,16 @@ const routes = [
     component: () => import("../components/shopping-cart/ShoppingCart.vue"),
   },
   {
+    path: "/order",
+    name: "Order",
+    component: () => import("../views/Order.vue"),
+  },
+  {
+    path: "/order-history",
+    name: "OrderHistory",
+    component: () => import("../components/order-history/OrderHistory.vue"),
+  },
+  {
     path: "/registerSeller",
     name: "RegisterSeller",
     component: () => import("../views/RegisterSeller.vue"),

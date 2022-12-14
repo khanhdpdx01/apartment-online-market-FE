@@ -204,9 +204,6 @@
                   </div>
                 </DisclosurePanel>
               </Disclosure>
-              {{ options.categories }}
-              {{ options.price.minValue }}
-              {{ options.price.maxValue }}
 
               <div class="w-full flex justify-center mt-4">
                 <button
@@ -339,7 +336,7 @@ export default {
     filterProduct() {
       const data = {
         size: 20,
-        page: this.currentPage,
+        page: this.page.currentPage,
         sorts: [],
         filterCriteriaList: [],
       };
@@ -363,7 +360,6 @@ export default {
       data.sorts.push({ ...tab.sort });
 
       ProductService.fitlerProduct(data).then((res) => {
-        console.log(res);
         this.page.totalPages = res.totalPages;
         this.page.totalItems = res.totalItems;
         this.page.currentPage = res.currentPage;
@@ -372,7 +368,6 @@ export default {
     },
 
     moveTab(idxTab) {
-      console.log(idxTab);
       this.options.tabs.forEach((tab, idx) => {
         idxTab === idx ? (tab.checked = true) : (tab.checked = false);
       });
@@ -382,7 +377,7 @@ export default {
       if (categories.length === 0) return;
 
       return {
-        key: "categoryId",
+        key: "category-id",
         operation: "IN",
         value: categories,
       };
@@ -399,7 +394,7 @@ export default {
       if (!isMinValueNaN && isMaxValueNaN) {
         return {
           key: "price",
-          operation: "MIN",
+          operation: "gte",
           field_type: "INTEGER",
           value: minValueInt,
         };
@@ -408,7 +403,7 @@ export default {
       if (isMinValueNaN && !isMaxValueNaN) {
         return {
           key: "price",
-          operation: "MAX",
+          operation: "lte",
           field_type: "INTEGER",
           value: maxValueInt,
         };
@@ -416,7 +411,7 @@ export default {
 
       return {
         key: "price",
-        operation: "BETWEEN",
+        operation: "btn",
         field_type: "INTEGER",
         value: minValueInt,
         value_to: maxValueInt,

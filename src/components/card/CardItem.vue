@@ -66,6 +66,8 @@
 
 <script>
 import CartService from "../../services/cart.service";
+import { useToast } from "vue-toastification";
+const toast = useToast();
 
 export default {
   props: ["product"],
@@ -79,12 +81,10 @@ export default {
       CartService.addProductToCart({
         productId: this.product.id,
         quantity: 1,
-      }).then((response) => {
-        console.log(response);
-      });
-
-      CartService.getCart().then((response) => {
-        console.log("Cart", response);
+      }).then(() => {
+        toast.success("Thêm vào giỏ hàng thành công", {
+          timeout: 1500,
+        });
       });
     },
   },

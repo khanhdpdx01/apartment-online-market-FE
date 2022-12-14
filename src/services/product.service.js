@@ -14,7 +14,7 @@ class ProductService {
   }
 
   fitlerProduct(data) {
-    return http.get("/products/filter", data).then((response) => {
+    return http.post("/products/filter", data).then((response) => {
       return response.data;
     });
   }
