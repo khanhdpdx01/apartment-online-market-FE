@@ -46,6 +46,11 @@ const routes = [
     name: "RegisterSeller",
     component: () => import("../views/RegisterSeller.vue"),
   },
+  {
+    path: "/detailProduct/:productId",
+    name: "DetailProduct",
+    component: () => import("../components/product/ProductOverview.vue"),
+  },
 ];
 
 const router = createRouter({
