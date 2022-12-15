@@ -128,7 +128,10 @@ export default {
       const password = document.getElementById("password");
       if (username.value == "" || password.value == "") {
         document.getElementById("invalidAccount").innerText =
-          "Invalid username or password";
+          "Tên đăng nhập hoặc mật khẩu không hợp lệ";
+        toast.error("Tên đăng nhập hoặc mật khẩu không hợp lệ", {
+          timeout: 1500,
+        });
       }
 
       this.$store
@@ -145,7 +148,7 @@ export default {
           },
           (error) => {
             document.getElementById("invalidAccount").innerText =
-          "Invalid username or password";
+              "Invalid username or password";
             this.loading = false;
             this.message =
               (error.response &&
@@ -153,7 +156,6 @@ export default {
                 error.response.data.message) ||
               error.message ||
               error.toString();
-              
           }
         );
     },

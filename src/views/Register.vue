@@ -148,7 +148,10 @@ export default {
       const password = document.getElementById("password");
       if (username.value == "" || password.value == "") {
         document.getElementById("invalidAccount").innerText =
-          "Please enter username and password";
+          "Vui lòng nhập đầy đủ username và mật khẩu";
+        toast.error("Vui lòng nhập đầy đủ username và mật khẩu", {
+          timeout: 1500,
+        });
       }
       this.$store
         .dispatch("auth/register", {

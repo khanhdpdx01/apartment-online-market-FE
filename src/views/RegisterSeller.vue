@@ -151,6 +151,9 @@ export default {
       if (username.value == "" || password.value == "") {
         document.getElementById("invalidAccount").innerText =
           "Please enter username and password";
+        toast.error("Please enter username and password", {
+          timeout: 1500,
+        });
       }
       this.$store
         .dispatch("auth/registerSeller", {
