@@ -29,7 +29,7 @@ class CartService {
       });
   }
 
-  removeCartItem({ cartId }) {
+  removeCartItem(cartId) {
     return http.delete(`/cart/${cartId}`).then((response) => {
       return response.data;
     });

@@ -7,15 +7,15 @@ const routes = [
     component: () => import("../views/Home.vue"),
   },
   {
-    path: "/shop",
-    name: "Shop",
-    component: () => import("../views/Shop.vue"),
-  },
-  {
     path: "/shop/products",
-    name: "Shop-product",
+    name: "Shop",
     component: () => import("../views/ProductShop.vue"),
   },
+  // {
+  //   path: "/shop/products",
+  //   name: "Shop-product",
+  //   component: () => import("../views/ProductShop.vue"),
+  // },
   {
     path: "/shop/products/:id",
     name: "product-detail-shop",
@@ -55,6 +55,21 @@ const routes = [
     path: "/registerSeller",
     name: "RegisterSeller",
     component: () => import("../views/RegisterSeller.vue"),
+  },
+  {
+    path: "/order/:orderId",
+    name: "OrderDetail",
+    component: () => import("../views/OrderDetail.vue"),
+  },
+  {
+    path: "/shop/order-histories",
+    name: "OrderHistoriesStore",
+    component: () => import("../components/store/OrderHistoriesStore.vue"),
+  },
+  {
+    path: "/store/order/:orderId",
+    name: "OrderDetailStore",
+    component: () => import("../components/store/OrderDetailStore.vue"),
   },
   {
     path: "/detailProduct/:productId",

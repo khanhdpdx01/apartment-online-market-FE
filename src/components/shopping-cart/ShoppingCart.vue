@@ -5,15 +5,37 @@
     >
       <h1
         class="text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl"
+        v-if="cart.length !== 0"
       >
         Shopping Cart
       </h1>
       <form
         class="mt-12 lg:grid lg:grid-cols-12 lg:gap-x-12 lg:items-start xl:gap-x-16"
+        v-if="cart.length !== 0"
       >
         <section aria-labelledby="cart-heading" class="lg:col-span-7">
           <h2 id="cart-heading" class="sr-only">Items in your shopping cart</h2>
-
+          <div class="mb-4 flex">
+            <div class="flex items-center mr-4">
+              <input
+                id="default-checkbox"
+                type="checkbox"
+                @click="choiceAllCartItem"
+                :checked="isChoiceAllCartItem"
+                class="w-5 h-5 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+              />
+              <label
+                for="default-checkbox"
+                class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+              ></label>
+            </div>
+            <div class="flex-1">
+              <span>Sản phẩm</span>
+            </div>
+            <div class="ml-4 flex-1 flex flex-col justify-between sm:ml-6">
+              <Dialog :cart="true" @delete-item="removeCart" />
+            </div>
+          </div>
           <ul
             role="list"
             class="border-t border-b border-gray-200 divide-y divide-gray-200"
@@ -23,6 +45,20 @@
               :key="cartItem.id"
               class="flex py-6 sm:py-10"
             >
+              <div class="flex items-center mr-4">
+                <input
+                  v-model="cartItemChoice"
+                  id="default-checkbox"
+                  type="checkbox"
+                  :value="cartItem.productId"
+                  @change="checkChoiceAllCartItem"
+                  class="w-5 h-5 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                />
+                <label
+                  for="default-checkbox"
+                  class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                ></label>
+              </div>
               <div class="flex-shrink-0">
                 <img
                   :src="`${baseUrlImage}${cartItem.product.imagesList[0]}`"
@@ -51,7 +87,6 @@
                         <!-- {{ product.color }} -->
                       </p>
                       <p
-                        v-if="product.size"
                         class="ml-4 pl-4 border-l border-gray-200 text-gray-500"
                       >
                         <!-- {{ product.size }} -->
@@ -85,9 +120,9 @@
                         class="-m-2 p-2 inline-flex text-gray-400 hover:text-gray-500"
                       >
                         <span class="sr-only">Remove</span>
-                        <XMarkIcon
-                          class="h-5 w-5 text-blue-50"
-                          aria-hidden="true"
+                        <Dialog
+                          :cart="false"
+                          @delete-item="removeCartItem(cartItem.id)"
                         />
                       </button>
                     </div>
@@ -131,62 +166,31 @@
           </div>
         </section>
       </form>
+
+      <div class="flex justify-center" v-else>
+        <span class="text-3xl font-extrabold tracking-tight text-gray-900"
+          >Giỏ hàng trống vui lòng thêm sản phẩm</span
+        >
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import { XMarkIcon } from "@heroicons/vue/24/solid";
 import CartService from "../../services/cart.service";
 import ProductService from "../../services/product.service";
 import OrderService from "../../services/order.service";
-
-const products = [
-  {
-    id: 1,
-    name: "Basic Tee",
-    href: "#",
-    price: "$32.00",
-    color: "Sienna",
-    inStock: true,
-    size: "Large",
-    imageSrc:
-      "https://tailwindui.com/img/ecommerce-images/shopping-cart-page-01-product-01.jpg",
-    imageAlt: "Front of men's Basic Tee in sienna.",
-  },
-  {
-    id: 2,
-    name: "Basic Tee",
-    href: "#",
-    price: "$32.00",
-    color: "Black",
-    inStock: false,
-    leadTime: "3–4 weeks",
-    size: "Large",
-    imageSrc:
-      "https://tailwindui.com/img/ecommerce-images/shopping-cart-page-01-product-02.jpg",
-    imageAlt: "Front of men's Basic Tee in black.",
-  },
-  {
-    id: 3,
-    name: "Nomad Tumbler",
-    href: "#",
-    price: "$35.00",
-    color: "White",
-    inStock: true,
-    imageSrc:
-      "https://tailwindui.com/img/ecommerce-images/shopping-cart-page-01-product-03.jpg",
-    imageAlt: "Insulated bottle with white base and black snap lid.",
-  },
-];
+import Dialog from "../dialog/Dialog.vue";
+import { useToast } from "vue-toastification";
+const toast = useToast();
 
 export default {
   components: {
-    XMarkIcon,
+    Dialog,
   },
   data() {
     return {
-      product: products,
+      cartId: null,
       cart: [],
       updateCartItemObj: {
         cartItemId: null,
@@ -194,17 +198,20 @@ export default {
         quantity: 0,
       },
       totalPrice: 0,
-      baseUrlImage: window.VUE_APP_SERVICE_ENDPOINT + "images/",
+      cartItemChoice: [],
+      baseUrlImage: process.env.VUE_APP_SERVICE_ENDPOINT + "images/",
+      isChoiceAllCartItem: false,
     };
   },
   async created() {
     await this.getCart();
-    await this.calculateTotalPrice();
+    this.calculateTotalPrice();
   },
   methods: {
     async getCart() {
       const cart = await CartService.getCart();
 
+      this.cartId = cart.id;
       // get product in cart
       const products = await Promise.all(
         cart.cartItemDtoList.map((cartItem) =>
@@ -244,10 +251,14 @@ export default {
       };
 
       this.cart.forEach((cartItem) => {
-        orders.orderLineItemList.push({
-          productId: cartItem.productId,
-          price: cartItem.product.price,
-          quantity: cartItem.quantity,
+        this.cartItemChoice.forEach((item) => {
+          if (cartItem.productId === item) {
+            orders.orderLineItemList.push({
+              productId: cartItem.productId,
+              price: cartItem.product.price,
+              quantity: cartItem.quantity,
+            });
+          }
         });
       });
 
@@ -264,6 +275,40 @@ export default {
       });
 
       this.totalPrice = totalPrice;
+    },
+
+    removeCartItem(cartItemId) {
+      CartService.removeCartItem(cartItemId).then(() => {
+        toast.error("Xóa sản phẩm thành công", {
+          timeout: 1500,
+        });
+      });
+    },
+
+    async removeCart() {
+      CartService.removeCartItem(this.cartId).then(() => {
+        toast.success("Xóa giỏ hàng thành công", {
+          timeout: 1500,
+        });
+      });
+      await this.getCart();
+    },
+
+    choiceAllCartItem() {
+      this.isChoiceAllCartItem = !this.isChoiceAllCartItem;
+      if (this.isChoiceAllCartItem) {
+        this.cart.forEach((cartItem) => {
+          this.cartItemChoice.push(cartItem.productId);
+        });
+      } else {
+        this.cartItemChoice = [];
+      }
+    },
+
+    checkChoiceAllCartItem() {
+      if (this.cartItemChoice.length === this.cart.length) {
+        this.isChoiceAllCartItem = true;
+      }
     },
   },
 };

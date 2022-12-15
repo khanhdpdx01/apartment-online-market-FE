@@ -243,9 +243,15 @@
                 </div>
               </div>
               <div class="h-96 rounded-lg lg:h-full">
-                <div class="my-5 grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-                  <CardItem v-for="product in this.products" :key="product.id" :product="product"
-                    @click="detailProduct(product.id)" />
+                <div
+                  class="my-5 grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4"
+                >
+                  <CardItem
+                    v-for="product in this.products"
+                    :key="product.id"
+                    :product="product"
+                    @click.prevent="detailProduct($event, product.id)"
+                  />
                 </div>
                 <div class="w-full flex justify-center">
                   <pagination
@@ -372,9 +378,10 @@ export default {
       if (categories.length === 0) return;
 
       return {
-        key: "category-id",
-        operation: "IN",
-        value: categories,
+        key: "category_id",
+        operation: "in",
+        field_type: "LONG",
+        values: categories,
       };
     },
 
@@ -417,9 +424,10 @@ export default {
       this.page.currentPage = page;
       this.filterProduct();
     },
-    detailProduct(productId) {
-       this.$router.push(`/detailProduct/${productId}`);
-    }
+    detailProduct(event, productId) {
+      if (event.target.tagName !== "A")
+        this.$router.push(`/detailProduct/${productId}`);
+    },
   },
 };
 </script>

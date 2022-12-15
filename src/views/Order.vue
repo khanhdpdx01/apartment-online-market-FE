@@ -20,6 +20,7 @@
               >
               <div class="mt-1">
                 <input
+                  v-model="data.email"
                   type="email"
                   id="email-address"
                   name="email-address"
@@ -46,6 +47,7 @@
                 >
                 <div class="mt-1">
                   <input
+                    v-model="data.firstName"
                     type="text"
                     id="first-name"
                     name="first-name"
@@ -63,6 +65,7 @@
                 >
                 <div class="mt-1">
                   <input
+                    v-model="data.lastName"
                     type="text"
                     id="last-name"
                     name="last-name"
@@ -72,19 +75,45 @@
                 </div>
               </div>
 
-              <div class="sm:col-span-2">
+              <div>
                 <label
-                  for="apartment"
+                  for="stage"
                   class="block text-sm font-medium text-gray-700"
-                  >Apartment, room, etc.</label
+                  >Stage</label
                 >
                 <div class="mt-1">
-                  <input
-                    type="text"
-                    name="apartment"
-                    id="apartment"
+                  <select
+                    v-model="stage"
+                    id="stage"
+                    name="stage"
+                    autocomplete="country-name"
                     class="block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                  />
+                  >
+                    <option v-for="x in rooms" :value="x.id" :key="x.id">
+                      {{ x.name }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+
+              <div>
+                <label
+                  for="room"
+                  class="block text-sm font-medium text-gray-700"
+                  >Room</label
+                >
+                <div class="mt-1">
+                  <select
+                    v-model="data.roomId"
+                    id="room"
+                    name="room"
+                    autocomplete="country-name"
+                    class="block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                  >
+                    <option v-for="x in filterRoom" :value="x.id" :key="x.id">
+                      {{ x.number }}
+                    </option>
+                  </select>
                 </div>
               </div>
 
@@ -96,6 +125,7 @@
                 >
                 <div class="mt-1">
                   <input
+                    v-model="data.phone"
                     type="text"
                     name="phone"
                     id="phone"
@@ -207,20 +237,9 @@ import { ref } from "vue";
 import { TrashIcon } from "@heroicons/vue/24/solid";
 import OrderService from "../services/order.service";
 import ProductService from "../services/product.service";
-
-const products = [
-  {
-    id: 1,
-    title: "Basic Tee",
-    href: "#",
-    price: "$32.00",
-    color: "Black",
-    size: "Large",
-    imageSrc:
-      "https://tailwindui.com/img/ecommerce-images/checkout-page-02-product-01.jpg",
-    imageAlt: "Front of men's Basic Tee in black.",
-  },
-];
+import StageService from "../services/stage.service";
+import { useToast } from "vue-toastification";
+const toast = useToast();
 const paymentMethods = [{ id: "vn-pay", title: "VN Pay" }];
 
 export default {
@@ -229,20 +248,54 @@ export default {
   },
   data() {
     return {
-      products,
       paymentMethods,
       order: [],
       totalPrice: 0,
-      baseUrlImage: window.VUE_APP_SERVICE_ENDPOINT + "images/",
+      baseUrlImage: process.env.VUE_APP_SERVICE_ENDPOINT + "images/",
+      rooms: [],
+      stage: null,
+      data: {
+        email: null,
+        phone: null,
+        roomId: null,
+        firstName: null,
+        lastName: null,
+      },
     };
   },
+  computed: {
+    filterRoom() {
+      return this.stage !== null
+        ? this.rooms.filter((x) => x.id === this.stage)[0]?.roomDtoList
+        : [];
+    },
+  },
   async created() {
-    await this.getOrder();
+    await Promise.all([this.getOrder(), this.getRooms()]);
+    this.stage = this.rooms[0].id;
   },
   methods: {
-    makePayment() {
+    async makePayment() {
+      if (
+        this.data.email === null ||
+        this.data.phone === null ||
+        this.data.roomId === null
+      ) {
+        toast.error("Vui lòng đầy đủ thông tin", {
+          timeout: 1500,
+        });
+        return;
+      }
       const order = JSON.parse(localStorage.getItem("order"));
-      const returnUrl = "http://localhost:9090/order-history";
+
+      await OrderService.updateOrderInfo(order.id, {
+        email: this.data.email,
+        phone: this.data.phone,
+        roomId: this.data.roomId,
+        customerName: `${this.data.firstName} ${this.data.lastName}`,
+      });
+
+      const returnUrl = "http://34.143.194.243:9000/order-history";
 
       OrderService.fetchVnpayUrl(order.reference, returnUrl).then((res) => {
         window.location.href = res.data;
@@ -275,6 +328,10 @@ export default {
 
       this.order = mergedCartItem;
       this.totalPrice = order.totalAmount;
+    },
+    async getRooms() {
+      const rooms = await StageService.getStage();
+      this.rooms = [...rooms];
     },
   },
 };

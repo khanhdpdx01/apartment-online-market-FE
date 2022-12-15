@@ -37,6 +37,11 @@ class TokenService {
     const user = JSON.parse(localStorage.getItem("user"));
     return user?.isExpired;
   }
+
+  getUserId() {
+    const user = JSON.parse(localStorage.getItem("user"));
+    return user?.userId;
+  }
 }
 
 export default new TokenService();

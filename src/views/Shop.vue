@@ -3,7 +3,8 @@
     <section class="relative block h-500-px">
       <div
         class="absolute top-0 w-full h-full bg-center bg-cover"
-        style="background-image: url('https://images.unsplash.com/photo-1499336315816-097655dcfbda?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=crop&amp;w=2710&amp;q=80');
+        style="
+          background-image: url('https://images.unsplash.com/photo-1499336315816-097655dcfbda?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=crop&amp;w=2710&amp;q=80');
         "
       >
         <span
@@ -62,32 +63,32 @@
               <div class="flex justify-center py-4 lg:pt-4 pt-8">
                 <div class="mr-4 p-3 text-center">
                   <router-link
-                  :to="{ path: '/shop/products' }"
-                  tag="span"
-                  class="cursor-pointer rounded-sm py-1 px-2 text-sm font-medium hover:bg-gray-100" v-if="this.$store.state.auth.is_store"
+                    :to="{ path: '/shop/products' }"
+                    tag="span"
+                    class="cursor-pointer rounded-sm py-1 px-2 text-sm font-medium hover:bg-gray-100"
+                    v-if="this.$store.state.auth.is_store"
                   >
-                  <span
-                    class="text-xl font-bold block uppercase tracking-wide text-blueGray-600"
-                    >{{store.productIds.length}}</span
-                  ><span class="text-sm text-blueGray-400">Thông tin sản phẩm</span>
-                  </router-link
-                >
+                    <span
+                      class="text-xl font-bold block uppercase tracking-wide text-blueGray-600"
+                      >{{ store.productIds.length }}</span
+                    ><span class="text-sm text-blueGray-400"
+                      >Thông tin sản phẩm</span
+                    >
+                  </router-link>
                 </div>
                 <div class="mr-4 p-3 text-center">
                   <router-link
-                  :to="{ path: '/shop/products' }"
-                  tag="span"
-                  class="cursor-pointer rounded-sm py-1 px-2 text-sm font-medium hover:bg-gray-100" v-if="this.$store.state.auth.is_store"
+                    :to="{ path: '/shop/products' }"
+                    tag="span"
+                    class="cursor-pointer rounded-sm py-1 px-2 text-sm font-medium hover:bg-gray-100"
+                    v-if="this.$store.state.auth.is_store"
                   >
-                  <span
-                    class="text-xl font-bold block uppercase tracking-wide text-blueGray-600"
-                    >0</span
-                  ><span class="text-sm text-blueGray-400">Đơn mua</span>
-                  </router-link
-                >
-                  
+                    <span
+                      class="text-xl font-bold block uppercase tracking-wide text-blueGray-600"
+                      >0</span
+                    ><span class="text-sm text-blueGray-400">Đơn mua</span>
+                  </router-link>
                 </div>
-            
               </div>
             </div>
           </div>
@@ -95,17 +96,16 @@
             <h3
               class="text-4xl font-semibold leading-normal mb-2 text-blueGray-700 mb-2"
             >
-              {{store.name}}
+              {{ store.name }}
+              <p class="mb-4 text-lg leading-relaxed text-blueGray-700">
+                {{ store.description }}
+              </p>
             </h3>
-           
           </div>
           <div class="mt-10 py-10 border-t border-blueGray-200 text-center">
             <div class="flex flex-wrap justify-center">
               <div class="w-full lg:w-9/12 px-4">
-                <p class="mb-4 text-lg leading-relaxed text-blueGray-700">
-                  {{store.description}}
-                </p>
-                <a href="#pablo" class="font-normal text-pink-500">Show more</a>
+                <ProductShop />
               </div>
             </div>
           </div>
@@ -145,30 +145,33 @@
 
 <script>
 import http from "../services/index";
+import ProductShop from "./ProductShop.vue";
 
 export default {
-  data(){
-    return{
-      store: {
-        description:"",
-        name:"",
-        productIds : []
-      }
-    }
+  component: {
+    ProductShop,
   },
-  async mounted(){
-
+  data() {
+    return {
+      store: {
+        description: "",
+        name: "",
+        productIds: [],
+      },
+    };
+  },
+  async mounted() {
     await http
       .get("/stores/owner")
-      .then(response =>{
-        this.store = response.data
-        this.$store.state.auth.store.id = response.data.id
-      })   
-      .catch(err=>{
-        console.log(err)
+      .then((response) => {
+        this.store = response.data;
+        this.$store.state.auth.store.id = response.data.id;
       })
-  }
-}
+      .catch((err) => {
+        console.log(err);
+      });
+  },
+};
 </script>
 
 <style>

@@ -73,7 +73,7 @@ export default {
   props: ["product"],
   data() {
     return {
-      baseUrlImage: window.VUE_APP_SERVICE_ENDPOINT + "images/",
+      baseUrlImage: process.env.VUE_APP_SERVICE_ENDPOINT + "images/",
     };
   },
   methods: {
@@ -81,11 +81,21 @@ export default {
       CartService.addProductToCart({
         productId: this.product.id,
         quantity: 1,
-      }).then(() => {
-        toast.success("Thêm vào giỏ hàng thành công", {
-          timeout: 1500,
+      })
+        .then(() => {
+          toast.success("Thêm vào giỏ hàng thành công", {
+            timeout: 1500,
+          });
+        })
+        .catch((err) => {
+          if (err.response.status === 403) {
+            this.$router.push("/login");
+          } else {
+            toast.error("Sản phẩm tạm thời hết hàng", {
+              timeout: 1500,
+            });
+          }
         });
-      });
     },
   },
 };

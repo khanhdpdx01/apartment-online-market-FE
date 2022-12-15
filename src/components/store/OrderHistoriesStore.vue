@@ -83,8 +83,6 @@
 <script>
 import OrderService from "../../services/order.service";
 import TokenService from "../../services/token.service";
-import { useToast } from "vue-toastification";
-const toast = useToast();
 
 export default {
   data() {
@@ -94,22 +92,6 @@ export default {
   },
   created() {
     this.getOrderHistory();
-
-    OrderService.fetchOrderReturn(window.location.href).then((res) => {
-      if (res.rspCode === "00" || res.rspCode === "02") {
-        toast.success("Xử lý đơn hàng thành công", {
-          timeout: 1500,
-        });
-      } else if (res.rspCode === "24") {
-        toast.success("Bạn đã hủy đơn hàng", {
-          timeout: 1500,
-        });
-      } else {
-        toast.error("Thanh toán thất bại", {
-          timeout: 1500,
-        });
-      }
-    });
   },
   methods: {
     getOrderHistory() {
@@ -117,9 +99,9 @@ export default {
       // this.orders.push(order);
 
       // const userId = TokenService.getUserId();
-      const userId = "32CE7E5E-6B07-4A6C-A8EB-73462ECA3790";
+      const storeId = "ec942a3a-3394-4129-86c0-a4508ec2c6fd";
 
-      OrderService.getOrderHistories(userId).then((res) => {
+      OrderService.getOrderHistoriesInStore(storeId).then((res) => {
         this.orders = [...res.data];
       });
     },
