@@ -220,8 +220,8 @@ import {
   MinusSmallIcon,
   PlusSmallIcon,
 } from "@heroicons/vue/24/outline";
-
-const product = {
+import ProductService from "@/services/product.service";
+let product = {
   name: "Zip Tote Basket",
   price: "$140",
   rating: 4,
@@ -284,7 +284,6 @@ const product = {
     // More sections...
   ],
 };
-
 export default {
   components: {
     Disclosure,
@@ -311,5 +310,27 @@ export default {
       selectedColor,
     };
   },
+  // data() {
+  //   return {
+  //     product
+  //     // product : {
+  //     // name: "",
+  //     // description: "",
+  //     // price: 0,
+  //     // }
+  //   };
+  // },
+  async created() {
+    await this.getDetailProduct(this.$route.params.productId);
+  },
+  methods : {
+    async getDetailProduct(productId){
+      console.log(this.$route.params.productId);
+      const response = await ProductService.fetchDetailsProduct(productId);
+      this.product = response;
+      console.log(this.product);
+    }
+  },
+  
 };
 </script>
