@@ -21,7 +21,7 @@
       <router-link
         :to="{ path: '/shop' }"
         tag="span"
-        class="cursor-pointer rounded-sm py-1 px-2 text-sm font-medium hover:bg-gray-100"
+        class="cursor-pointer rounded-sm py-1 px-2 text-sm font-medium hover:bg-gray-100" v-if="this.$store.state.auth.is_store==true"
         >Quản lý shop</router-link
       >
       <router-link

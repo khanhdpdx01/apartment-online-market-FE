@@ -3,8 +3,7 @@
     <section class="relative block h-500-px">
       <div
         class="absolute top-0 w-full h-full bg-center bg-cover"
-        style="
-          background-image: url('https://images.unsplash.com/photo-1499336315816-097655dcfbda?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=crop&amp;w=2710&amp;q=80');
+        style="background-image: url('https://images.unsplash.com/photo-1499336315816-097655dcfbda?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=crop&amp;w=2710&amp;q=80');
         "
       >
         <span
@@ -62,23 +61,33 @@
             <div class="w-full lg:w-4/12 px-4 lg:order-1">
               <div class="flex justify-center py-4 lg:pt-4 pt-8">
                 <div class="mr-4 p-3 text-center">
+                  <router-link
+                  :to="{ path: '/shop/products' }"
+                  tag="span"
+                  class="cursor-pointer rounded-sm py-1 px-2 text-sm font-medium hover:bg-gray-100" v-if="this.$store.state.auth.is_store"
+                  >
                   <span
                     class="text-xl font-bold block uppercase tracking-wide text-blueGray-600"
-                    >22</span
-                  ><span class="text-sm text-blueGray-400">Friends</span>
+                    >{{store.productIds.length}}</span
+                  ><span class="text-sm text-blueGray-400">Thông tin sản phẩm</span>
+                  </router-link
+                >
                 </div>
                 <div class="mr-4 p-3 text-center">
+                  <router-link
+                  :to="{ path: '/shop/products' }"
+                  tag="span"
+                  class="cursor-pointer rounded-sm py-1 px-2 text-sm font-medium hover:bg-gray-100" v-if="this.$store.state.auth.is_store"
+                  >
                   <span
                     class="text-xl font-bold block uppercase tracking-wide text-blueGray-600"
-                    >10</span
-                  ><span class="text-sm text-blueGray-400">Photos</span>
+                    >0</span
+                  ><span class="text-sm text-blueGray-400">Đơn mua</span>
+                  </router-link
+                >
+                  
                 </div>
-                <div class="lg:mr-4 p-3 text-center">
-                  <span
-                    class="text-xl font-bold block uppercase tracking-wide text-blueGray-600"
-                    >89</span
-                  ><span class="text-sm text-blueGray-400">Comments</span>
-                </div>
+            
               </div>
             </div>
           </div>
@@ -86,34 +95,15 @@
             <h3
               class="text-4xl font-semibold leading-normal mb-2 text-blueGray-700 mb-2"
             >
-              Jenna Stones
+              {{store.name}}
             </h3>
-            <div
-              class="text-sm leading-normal mt-0 mb-2 text-blueGray-400 font-bold uppercase"
-            >
-              <i
-                class="fas fa-map-marker-alt mr-2 text-lg text-blueGray-400"
-              ></i>
-              Los Angeles, California
-            </div>
-            <div class="mb-2 text-blueGray-600 mt-10">
-              <i class="fas fa-briefcase mr-2 text-lg text-blueGray-400"></i
-              >Solution Manager - Creative Tim Officer
-            </div>
-            <div class="mb-2 text-blueGray-600">
-              <i class="fas fa-university mr-2 text-lg text-blueGray-400"></i
-              >University of Computer Science
-            </div>
+           
           </div>
           <div class="mt-10 py-10 border-t border-blueGray-200 text-center">
             <div class="flex flex-wrap justify-center">
               <div class="w-full lg:w-9/12 px-4">
                 <p class="mb-4 text-lg leading-relaxed text-blueGray-700">
-                  An artist of considerable range, Jenna the name taken by
-                  Melbourne-raised, Brooklyn-based Nick Murphy writes, performs
-                  and records all of his own music, giving it a warm, intimate
-                  feel with a solid groove structure. An artist of considerable
-                  range.
+                  {{store.description}}
                 </p>
                 <a href="#pablo" class="font-normal text-pink-500">Show more</a>
               </div>
@@ -152,6 +142,34 @@
     </section>
   </main>
 </template>
+
+<script>
+import http from "../services/index";
+
+export default {
+  data(){
+    return{
+      store: {
+        description:"",
+        name:"",
+        productIds : []
+      }
+    }
+  },
+  async mounted(){
+
+    await http
+      .get("/stores/owner")
+      .then(response =>{
+        this.store = response.data
+        this.$store.state.auth.store.id = response.data.id
+      })   
+      .catch(err=>{
+        console.log(err)
+      })
+  }
+}
+</script>
 
 <style>
 @import "../assets/css/tailwind-2.0.4.css";

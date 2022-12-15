@@ -141,6 +141,7 @@ export default {
             toast.success("Đăng nhập thành công", {
               timeout: 1500,
             });
+            
             this.$router.push("/");
           },
           (error) => {
