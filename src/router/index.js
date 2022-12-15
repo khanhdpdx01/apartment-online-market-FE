@@ -61,6 +61,11 @@ const routes = [
     name: "OrderDetailStore",
     component: () => import("../components/store/OrderDetailStore.vue"),
   },
+  {
+    path: "/detailProduct/:productId",
+    name: "DetailProduct",
+    component: () => import("../components/product/ProductOverview.vue"),
+  },
 ];
 
 const router = createRouter({

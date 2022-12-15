@@ -3,7 +3,8 @@ import TokenService from "./token.service";
 
 class AuthService {
   login({ username, password }) {
-    return http
+    try {
+      return http
       .post("/v1/auth/signin", {
         username,
         password,
@@ -16,6 +17,10 @@ class AuthService {
 
         return response.data;
       });
+    } catch (err) {
+      return err;
+    }
+    
   }
 
   logout() {

@@ -107,6 +107,9 @@
 </style>
 
 <script>
+import { useToast } from "vue-toastification";
+const toast = useToast();
+
 export default {
   name: "Register",
   data() {
@@ -156,6 +159,9 @@ export default {
         })
         .then(
           () => {
+            toast.success("Đăng ký thành công", {
+              timeout: 1500,
+            });
             this.$router.push("/login");
           },
           (error) => {

@@ -96,6 +96,8 @@
 </style>
 
 <script>
+import { useToast } from "vue-toastification";
+const toast = useToast();
 export default {
   name: "Login",
   data() {
@@ -136,9 +138,14 @@ export default {
         })
         .then(
           () => {
+            toast.success("Đăng nhập thành công", {
+              timeout: 1500,
+            });
             this.$router.push("/");
           },
           (error) => {
+            document.getElementById("invalidAccount").innerText =
+          "Invalid username or password";
             this.loading = false;
             this.message =
               (error.response &&
@@ -146,6 +153,7 @@ export default {
                 error.response.data.message) ||
               error.message ||
               error.toString();
+              
           }
         );
     },
