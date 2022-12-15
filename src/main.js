@@ -5,6 +5,7 @@ import store from "./store";
 import "./assets/css/tailwind.css";
 import Toast from "vue-toastification";
 import "vue-toastification/dist/index.css";
+import "flowbite";
 import setupInterceptors from "./services/setupInterceptors";
 
 setupInterceptors(store);

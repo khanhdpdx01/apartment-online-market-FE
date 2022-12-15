@@ -377,9 +377,10 @@ export default {
       if (categories.length === 0) return;
 
       return {
-        key: "category-id",
-        operation: "IN",
-        value: categories,
+        key: "category_id",
+        operation: "in",
+        field_type: "LONG",
+        values: categories,
       };
     },
 

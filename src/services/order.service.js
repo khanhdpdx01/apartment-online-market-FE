@@ -29,6 +29,38 @@ class OrderService {
       return response.data;
     });
   }
+
+  getOrderHistories(userId) {
+    return http.get(`/order/histories/${userId}`).then((response) => {
+      return response.data;
+    });
+  }
+
+  getOrderDetail(orderId) {
+    return http.get(`/order/details/${orderId}`).then((response) => {
+      return response.data;
+    });
+  }
+
+  getOrderHistoriesInStore(storeId) {
+    return http.get(`/order/store/histories/${storeId}`).then((response) => {
+      return response.data;
+    });
+  }
+
+  getOrderDetailInStore(storeId, orderId) {
+    return http
+      .get(`/order/store/${storeId}/detail/${orderId}`)
+      .then((response) => {
+        return response.data;
+      });
+  }
+
+  updateOrderInfo(orderId, data) {
+    return http.put(`/order/info/${orderId}`, data).then((response) => {
+      return response.data;
+    });
+  }
 }
 
 export default new OrderService();
