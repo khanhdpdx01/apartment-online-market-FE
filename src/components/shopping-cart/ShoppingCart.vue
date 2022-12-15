@@ -20,7 +20,7 @@
               <input
                 id="default-checkbox"
                 type="checkbox"
-                @onChange="choiceAllCartItem"
+                @click="choiceAllCartItem"
                 :checked="isChoiceAllCartItem"
                 class="w-5 h-5 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
               />
@@ -87,7 +87,6 @@
                         <!-- {{ product.color }} -->
                       </p>
                       <p
-                        v-if="product.size"
                         class="ml-4 pl-4 border-l border-gray-200 text-gray-500"
                       >
                         <!-- {{ product.size }} -->
@@ -185,52 +184,12 @@ import Dialog from "../dialog/Dialog.vue";
 import { useToast } from "vue-toastification";
 const toast = useToast();
 
-const products = [
-  {
-    id: 1,
-    name: "Basic Tee",
-    href: "#",
-    price: "$32.00",
-    color: "Sienna",
-    inStock: true,
-    size: "Large",
-    imageSrc:
-      "https://tailwindui.com/img/ecommerce-images/shopping-cart-page-01-product-01.jpg",
-    imageAlt: "Front of men's Basic Tee in sienna.",
-  },
-  {
-    id: 2,
-    name: "Basic Tee",
-    href: "#",
-    price: "$32.00",
-    color: "Black",
-    inStock: false,
-    leadTime: "3–4 weeks",
-    size: "Large",
-    imageSrc:
-      "https://tailwindui.com/img/ecommerce-images/shopping-cart-page-01-product-02.jpg",
-    imageAlt: "Front of men's Basic Tee in black.",
-  },
-  {
-    id: 3,
-    name: "Nomad Tumbler",
-    href: "#",
-    price: "$35.00",
-    color: "White",
-    inStock: true,
-    imageSrc:
-      "https://tailwindui.com/img/ecommerce-images/shopping-cart-page-01-product-03.jpg",
-    imageAlt: "Insulated bottle with white base and black snap lid.",
-  },
-];
-
 export default {
   components: {
     Dialog,
   },
   data() {
     return {
-      product: products,
       cartId: null,
       cart: [],
       updateCartItemObj: {
@@ -240,7 +199,7 @@ export default {
       },
       totalPrice: 0,
       cartItemChoice: [],
-      baseUrlImage: window.VUE_APP_SERVICE_ENDPOINT + "images/",
+      baseUrlImage: process.env.VUE_APP_SERVICE_ENDPOINT + "images/",
       isChoiceAllCartItem: false,
     };
   },
@@ -292,10 +251,14 @@ export default {
       };
 
       this.cart.forEach((cartItem) => {
-        orders.orderLineItemList.push({
-          productId: cartItem.productId,
-          price: cartItem.product.price,
-          quantity: cartItem.quantity,
+        this.cartItemChoice.forEach((item) => {
+          if (cartItem.productId === item) {
+            orders.orderLineItemList.push({
+              productId: cartItem.productId,
+              price: cartItem.product.price,
+              quantity: cartItem.quantity,
+            });
+          }
         });
       });
 
@@ -322,20 +285,24 @@ export default {
       });
     },
 
-    removeCart() {
+    async removeCart() {
       CartService.removeCartItem(this.cartId).then(() => {
         toast.success("Xóa giỏ hàng thành công", {
           timeout: 1500,
         });
       });
+      await this.getCart();
     },
 
     choiceAllCartItem() {
-      this.cart.forEach((cartItem) => {
-        this.cartItemChoice.push(cartItem.productId);
-      });
-
-      this.isChoiceAllCartItem = true;
+      this.isChoiceAllCartItem = !this.isChoiceAllCartItem;
+      if (this.isChoiceAllCartItem) {
+        this.cart.forEach((cartItem) => {
+          this.cartItemChoice.push(cartItem.productId);
+        });
+      } else {
+        this.cartItemChoice = [];
+      }
     },
 
     checkChoiceAllCartItem() {

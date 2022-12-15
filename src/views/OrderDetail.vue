@@ -151,40 +151,6 @@
                       </p>
                     </div>
                   </div>
-
-                  <div class="mt-6 sm:flex sm:justify-between">
-                    <div class="flex items-center">
-                      <CheckCircleIcon
-                        class="w-5 h-5 text-green-500"
-                        aria-hidden="true"
-                      />
-                      <p class="ml-2 text-sm font-medium text-gray-500">
-                        Delivered on
-                        <time :datetime="order.deliveredDatetime">{{
-                          order.deliveredDate
-                        }}</time>
-                      </p>
-                    </div>
-
-                    <div
-                      class="mt-6 border-t border-gray-200 pt-4 flex items-center space-x-4 divide-x divide-gray-200 text-sm font-medium sm:mt-0 sm:ml-4 sm:border-none sm:pt-0"
-                    >
-                      <div class="flex-1 flex justify-center">
-                        <a
-                          :href="product.href"
-                          class="text-indigo-600 whitespace-nowrap hover:text-indigo-500"
-                          >View product</a
-                        >
-                      </div>
-                      <div class="flex-1 pl-4 flex justify-center">
-                        <a
-                          href="#"
-                          class="text-indigo-600 whitespace-nowrap hover:text-indigo-500"
-                          >Buy again</a
-                        >
-                      </div>
-                    </div>
-                  </div>
                 </li>
               </ul>
             </div>
@@ -245,7 +211,7 @@ export default {
       orders,
       orderss: {},
       totalPrice: 0,
-      baseUrlImage: window.VUE_APP_SERVICE_ENDPOINT + "images/",
+      baseUrlImage: process.env.VUE_APP_SERVICE_ENDPOINT + "images/",
     };
   },
 

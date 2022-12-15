@@ -7,9 +7,19 @@ const routes = [
     component: () => import("../views/Home.vue"),
   },
   {
-    path: "/shop",
+    path: "/shop/products",
     name: "Shop",
-    component: () => import("../views/Shop.vue"),
+    component: () => import("../views/ProductShop.vue"),
+  },
+  // {
+  //   path: "/shop/products",
+  //   name: "Shop-product",
+  //   component: () => import("../views/ProductShop.vue"),
+  // },
+  {
+    path: "/shop/products/:id",
+    name: "product-detail-shop",
+    component: () => import("../views/DetailProduct.vue"),
   },
   {
     path: "/test",
@@ -52,7 +62,7 @@ const routes = [
     component: () => import("../views/OrderDetail.vue"),
   },
   {
-    path: "/store",
+    path: "/shop/order-histories",
     name: "OrderHistoriesStore",
     component: () => import("../components/store/OrderHistoriesStore.vue"),
   },

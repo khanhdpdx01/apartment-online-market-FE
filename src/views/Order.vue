@@ -251,7 +251,7 @@ export default {
       paymentMethods,
       order: [],
       totalPrice: 0,
-      baseUrlImage: window.VUE_APP_SERVICE_ENDPOINT + "images/",
+      baseUrlImage: process.env.VUE_APP_SERVICE_ENDPOINT + "images/",
       rooms: [],
       stage: null,
       data: {
@@ -295,7 +295,7 @@ export default {
         customerName: `${this.data.firstName} ${this.data.lastName}`,
       });
 
-      const returnUrl = "http://localhost:9090/order-history";
+      const returnUrl = "http://34.143.194.243:9000/order-history";
 
       OrderService.fetchVnpayUrl(order.reference, returnUrl).then((res) => {
         window.location.href = res.data;

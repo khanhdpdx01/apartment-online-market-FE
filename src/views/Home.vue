@@ -1,10 +1,6 @@
 <template>
   <div>
-    <div class="flex justify-center items-center">
-      <h1 class="my-4 text-5xl font-sans font-bold">
-        Mua bán, trao đổi, cho thuê vật phẩm
-      </h1>
-    </div>
+
     <div class="carousel w-full">
       <div id="slide1" class="carousel-item relative w-full">
         <GroupCards />
