@@ -7,7 +7,12 @@ const initialState = user
 
 export const auth = {
   namespaced: true,
-  state: initialState,
+  state: {initialState,
+    is_store : false,
+    store : {
+      id : null,
+    }
+  },
   actions: {
     login({ commit }, user) {
       return AuthService.login(user).then(
@@ -57,6 +62,12 @@ export const auth = {
     loginSuccess(state, user) {
       state.status.loggedIn = true;
       state.user = user;
+      if (user.roles.includes('ROLE_SELLER')){
+        state.is_store = true
+        console.log("hello")
+        console.log(state.is_store)
+     }
+      
     },
     loginFailure(state) {
       state.status.loggedIn = false;
@@ -65,6 +76,8 @@ export const auth = {
     logout(state) {
       state.status.loggedIn = false;
       state.user = null;
+      state.store.id ='';
+      state.is_store=false
     },
     registerSuccess(state) {
       state.status.loggedIn = false;
